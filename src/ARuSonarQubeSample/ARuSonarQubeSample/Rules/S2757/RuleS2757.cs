@@ -1,54 +1,53 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // namespace
 // --------------------------------------------------------------------------------------------------------------------
-namespace ARuSonarQubeSample.Rules.S3949
+namespace ARuSonarQubeSample.Rules.S2757
 {
     // --------------------------------------------------------------------------------------------------------------------
     // classes
     // --------------------------------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Calculations should not overflow
+    /// "=+" should not be used instead of "+="
     /// </summary>
     /// <remarks>
-    /// <para>数値型のオーバーフロー、アンダーフローのチェックを行います。</para>
+    /// <para>"=+"、"=-"、"=!"のような演算子ペアを使用していないか確認します。</para>
     /// </remarks>
-    public static class RuleS3949
+    public static class RuleS2757
     {
         // --------------------------------------------------------------------------------------------------------------------
         // methods
         // --------------------------------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// 非準拠コード(S3949)
+        /// 非準拠コード(S2757)
         /// </summary>
         /// <remarks>
-        /// <para>本例ではint.MaxValueに1を加算することで、オーバーフローを発生させています。</para>
+        /// <para>逆の単一の演算子 (+=、-= または !=) を意味する演算子のペア ( =+、=- または =! ) を使用すると、</para>
+        /// <para>コンパイルおよび実行されますが、期待される結果は得られません。</para>
         /// </remarks>
-        public static int NoncompliantCodeS3949(int value)
+        public static void NoncompliantCodeS2757()
         {
-            if (value <= 0)
-            {
-                return value;
-            }
-            int num = int.MaxValue;
-            return num + value;
+            int target = -5;
+            int num = 3;
+
+            target =- num;  // target = -num;と判断される
+            target =+ num;  // target = +num;と判断される
         }
 
         /// <summary>
-        /// 準拠コード(S3949)
+        /// 準拠コード(S2757)
         /// </summary>
         /// <remarks>
-        /// <para>オーバーフローが発生していない例です。</para>
+        /// <para>"+="、"-="、"!="を使用するようにします。</para>
         /// </remarks>
-        public static int CompliantCodeS3949(int value)
+        public static void CompliantCodeS2757()
         {
-            if (value <= 0)
-            {
-                return value;
-            }
-            int num = int.MaxValue - 1;
-            return num + value;
+            int target = -5;
+            int num = 3;
+
+            target = -num;
+            target += num;
         }
     }
 }
